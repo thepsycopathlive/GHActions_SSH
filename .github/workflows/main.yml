@@ -1,0 +1,21 @@
+name: SSH
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-20.04
+
+    steps:
+      - uses: fastai/workflows/ssh@master
+        with:
+          ssh_key: ${{ secrets.SSH_KEY }}
+          key_file: id_rsa
+      - uses: actions/checkout@v2
+      - name: Clean Junks
+        uses: rokibhasansagar/slimhub_actions@main
+      - name: Dummy
+        run: sleep 3s
+      - name: Setup tmate session
+        uses: mxschmitt/action-tmate@master
