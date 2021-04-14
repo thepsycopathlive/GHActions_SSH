@@ -1,17 +1,29 @@
-name: SSH
+name: Ubuntu SSH
 
 on:
   workflow_dispatch:
+    inputs:
+      git-ref:
+        description: Start with b164a616a8831ab6ac92b6aceb91f5e3b7bab82b Git-Ref (Focal)
+        required: false
 
 jobs:
   ssh:
     runs-on: ubuntu-18.04
 
     env:
-      GitHubMail: "rokibhasansagar2014@outlook.com"
-      GitHubName: "rokibhasansagar"
+      GitHubMail: ${{ secrets.GitHubMail }}
+      GitHubName: ${{ secrets.GitHubName }}
 
     steps:
+      - uses: actions/checkout@main
+        if: github.event.inputs.git-ref == ''
+
+      - uses: actions/checkout@main
+        if: github.event.inputs.git-ref != ''
+        with:
+          ref: ${{ github.event.inputs.git-ref }}
+
       - name: Set Git Configs & Secrets
         run: |
           git config --global user.email ${GitHubMail}
